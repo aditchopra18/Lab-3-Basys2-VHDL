@@ -1,0 +1,20 @@
+NET "rst"  LOC = "G12";
+
+NET "hex<6>"  LOC = "L14";
+NET "hex<5>"  LOC = "H12";
+NET "hex<4>"  LOC = "N14";
+NET "hex<3>"  LOC = "N11";
+NET "hex<2>"  LOC = "P12";
+NET "hex<1>"  LOC = "L13";
+NET "hex<0>"  LOC = "M12";
+
+NET "segment<3>"  LOC = "F12";
+NET "segment<2>"  LOC = "J12";
+NET "segment<1>"  LOC = "M13";
+NET "segment<0>"  LOC = "K14";
+NET "light<3>"  LOC = "P6";
+NET "light<2>"  LOC = "P7";
+NET "light<1>"  LOC = "M11";
+NET "light<0>"  LOC = "M5";
+
+NET "clk"  LOC = "B8";

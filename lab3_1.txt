@@ -1,0 +1,73 @@
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.std_logic_unsigned.all;
+
+entity hexcounter is
+port(clk : in std_logic;
+     rst : in std_logic;
+	  segment : out std_logic_vector(3 downto 0);
+     hex : out std_logic_vector(6 downto 0);
+	  light : out std_logic_vector(3 downto 0));
+end hexcounter;
+
+architecture Behavioural of hexcounter is
+	signal ctime: integer range 0 to 49999999 := 0;	--clock divider signal
+begin
+	process(clk,rst) 
+		variable count : std_logic_vector(4 downto 0);
+	begin
+		if (rst='1') then
+			ctime <= 0;
+			count:="00000";
+		elsif (rising_edge(clk)) then
+			case count is
+				when others => segment <= "0111"; 
+			end case;
+			ctime <= ctime + 1;
+			if (ctime = 49999999) then
+				count := count+1;
+					if(count = "10000") then
+						count:="00000";
+					end if;
+			end if;
+		end if;
+		case count is 
+			when "00000" => hex <= "0000001";-- shows 0
+			when "00001" => hex <= "1001111";-- shows 1
+			when "00010" => hex <= "0010010";-- shows 2
+			when "00011" => hex <= "0000110";-- shows 3
+			when "00100" => hex <= "1001100";-- shows 4
+			when "00101" => hex <= "0100100";-- shows 5
+			when "00110" => hex <= "0100000";-- shows 6
+			when "00111" => hex <= "0001111";-- shows 7
+			when "01000" => hex <= "0000000";-- shows 8
+			when "01001" => hex <= "0000100";-- shows 9
+			when "01010" => hex <= "0001000";-- shows A
+			when "01011" => hex <= "1100000";-- shows B
+			when "01100" => hex <= "0110001";-- shows C
+			when "01101" => hex <= "1000010";-- shows D
+			when "01110" => hex <= "0110000";-- shows E 
+			when "01111" => hex <= "0111000";-- shows F
+			when others=>null;
+		end case;
+		case count is 
+			when "00000" => light <= "0000";-- show 
+			when "00001" => light <= "0001";-- show
+			when "00010" => light <= "0010";-- show
+			when "00011" => light <= "0011";-- show
+			when "00100" => light <= "0100";-- show
+			when "00101" => light <= "0101";-- show
+			when "00110" => light <= "0110";-- show
+			when "00111" => light <= "0111";-- show
+			when "01000" => light <= "1000";-- show 
+			when "01001" => light <= "1001";-- show
+			when "01010" => light <= "1010";-- show
+			when "01011" => light <= "1011";-- show
+			when "01100" => light <= "1100";-- show
+			when "01101" => light <= "1101";-- show
+			when "01110" => light <= "1110";-- show
+			when "01111" => light <= "1111";-- show
+			when others=>null;
+		end case;
+	end process;
+end Behavioural;

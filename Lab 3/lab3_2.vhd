@@ -1,0 +1,109 @@
+--comment already provided in last one. This one will have breif
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.std_logic_unsigned.all;
+
+entity decimalcounter is
+port(clk : in std_logic;
+     rst : in std_logic;
+	  segment : out std_logic_vector(3 downto 0);
+     hex : out std_logic_vector(6 downto 0);
+	  light : out std_logic_vector(3 downto 0));
+end decimalcounter;
+
+architecture Behavioural of decimalcounter is
+	signal ctime: integer range 0 to 50000000 := 0;
+	signal cctime: integer range 0 to 500 := 0;
+begin
+	process(clk,rst) 
+		variable count : std_logic_vector(4 downto 0);
+		variable counttt : std_logic_vector(1 downto 0);
+	begin
+		if (rst='1') then
+			ctime <= 0;
+			cctime <= 0;
+			count:="00000";
+			counttt:="00";
+		elsif (rising_edge(clk)) then --the clock takes one step
+			ctime <= ctime + 1;--time takes one step
+			cctime <= cctime + 1;--second time takes one step
+			if (cctime = 500) then --wait for some time to increment segment selection
+				counttt := counttt +1;
+					if (counttt = "10") then
+						counttt:= "00";
+					end if;
+			end if;
+			if (ctime = 50000000) then --imcrement ctime with a time gap for 1hz
+				count := count+1;
+					if(count = "10000") then
+						count:="00000";
+					end if;
+			end if;
+		end if;
+		case counttt is
+			 when "00" => 
+				segment <= "0111";
+				case count is
+					when "00000" => hex <= "0000001";-- shows 0
+					when "00001" => hex <= "1001111";-- shows 1
+					when "00010" => hex <= "0010010";-- shows 2
+					when "00011" => hex <= "0000110";-- shows 3
+					when "00100" => hex <= "1001100";-- shows 4
+					when "00101" => hex <= "0100100";-- shows 5
+					when "00110" => hex <= "0100000";-- shows 6
+					when "00111" => hex <= "0001111";-- shows 7
+					when "01000" => hex <= "0000000";-- shows 8
+					when "01001" => hex <= "0000100";-- shows 9
+					when "01010" => hex <= "0000001";-- shows 0
+					when "01011" => hex <= "1001111";-- shows 1
+					when "01100" => hex <= "0010010";-- shows 2
+					when "01101" => hex <= "0000110";-- shows 3
+					when "01110" => hex <= "1001100";-- shows 4
+					when "01111" => hex <= "0100100";-- shows 5
+					when others => hex <= "1111111";
+				end case;
+			 when "01" => 
+				segment <= "1011";
+				case count is
+					when "00000" => hex <= "0000001";-- shows 0
+					when "00001" => hex <= "0000001";-- shows 0
+					when "00010" => hex <= "0000001";-- shows 0
+					when "00011" => hex <= "0000001";-- shows 0
+					when "00100" => hex <= "0000001";-- shows 0
+					when "00101" => hex <= "0000001";-- shows 0
+					when "00110" => hex <= "0000001";-- shows 0
+					when "00111" => hex <= "0000001";-- shows 0
+					when "01000" => hex <= "0000001";-- shows 0
+					when "01001" => hex <= "0000001";-- shows 0
+					when "01010" => hex <= "1001111";-- shows 1
+					when "01011" => hex <= "1001111";-- shows 1
+					when "01100" => hex <= "1001111";-- shows 1
+					when "01101" => hex <= "1001111";-- shows 1
+					when "01110" => hex <= "1001111";-- shows 1
+					when "01111" => hex <= "1001111";-- shows 1
+					when others => hex <= "1111111";
+				end case;
+			 when others => segment <= "1111"; --nothing lights up
+		end case;
+	
+		case count is 
+			when "00000" => light <= "0000";-- show 
+			when "00001" => light <= "0001";-- show
+			when "00010" => light <= "0010";-- show
+			when "00011" => light <= "0011";-- show
+			when "00100" => light <= "0100";-- show
+			when "00101" => light <= "0101";-- show
+			when "00110" => light <= "0110";-- show
+			when "00111" => light <= "0111";-- show
+			when "01000" => light <= "1000";-- show 
+			when "01001" => light <= "1001";-- show
+			when "01010" => light <= "1010";-- show
+			when "01011" => light <= "1011";-- show
+			when "01100" => light <= "1100";-- show
+			when "01101" => light <= "1101";-- show
+			when "01110" => light <= "1110";-- show
+			when "01111" => light <= "1111";-- show
+			when others=>null;
+		end case;
+	end process;
+end Behavioural;
